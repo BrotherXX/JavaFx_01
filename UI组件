@@ -8,3 +8,92 @@ vb.setLayoutX(5); //设置VBox距离Scene左边缘的横向距离；
 ScrollBar sc = new ScrollBar();
 sc.setLayoutX(5); //设置scrollBar距离Scene左边缘的横向距离
 
+滚动面板
+在设计UI界面时，你可能会需要改变滚动面板内部组件的大小，以使其能适应滚动面板的宽和高。
+可以通过使用setFitToWidth或setFitToHeight方法将对应属性设置为true来在对应维度上适应大小变化。
+在默认情况下，FIT_TO_WIDHT和FIT_TO_HEIGHT属性值都是false，并且所有的内容均会保持其初始大小。
+如果从代码中移除了对setFitToWidth方法的调用，那么将会看到如图11-4的效果。
+
+final ScrollPane sp = new ScrollPane();
+final VBox vb = new VBox();
+box.getChildren().addAll(sp, fileName);
+VBox.setVgrow(sp, Priority.ALWAYS);//当调整VBox的纵向高度时，给其中的某个孩子分配额外空间，如果多个孩子配置了相同的优先级，则调高多出来的空间
+在多个孩子上平均分配；如果都没有配置优先级，则VBox在调高时不会给任何一个孩子分配空间。
+
+final ImageView[] pics = new ImageView[5];
+pics[i].setFitWidth(100);  //The width of the bounding box within which the source image is resized as necessary to fit. If set to a value <= 0, 
+then the intrinsic width of the image will be used as the fitWidth.
+pics[i].setPreserveRatio(true);
+/*
+Property Description:
+Indicates whether to preserve the aspect ratio of the source image when scaling to fit the image within the fitting bounding box.
+If set to true, it affects the dimensions of this ImageView in the following way *
+
+If only fitWidth is set, height is scaled to preserve ratio
+If only fitHeight is set, width is scaled to preserve ratio
+If both are set, they both may be scaled to get the best fit in a width by height rectangle while preserving the original aspect ratio
+If unset or set to false, it affects the dimensions of this ImageView in the following way *
+If only fitWidth is set, image's view width is scaled to match and height is unchanged;
+If only fitHeight is set, image's view height is scaled to match and height is unchanged;
+If both are set, the image view is scaled to match both.
+Note that the dimensions of this node as reported by the node's bounds will be equal to the size of the scaled image and 
+is guaranteed to be contained within fitWidth x fitHeight bonding box.
+@defaultValue
+false
+*/
+
+$List View
+你可以通过SelectionModel和FocusModel类来随时跟踪ListView对象中被选择和获得焦点的选项。为了取得各个列表项的当前状态，可以通过使用下面的方法组合：
+
+    · getSelectionModel().getSelectedIndex()
+
+        –返回在单选（single-selection）模式下当前被选中的列表项索引号。
+
+    · getSelectionModel().getSelectedItem()
+
+        – 返回当前被选中的列表项。
+
+    · getFocusModel().getFocusedIndex()
+
+        –返回当前获得焦点的列表项索引号。
+
+    · getFocusModel().getFocusedItem()
+
+        –返回当前获得焦点的列表项。
+
+在实例化ListView时默认使用的SelectionModel是MultiSelectionModel抽象类的一个实现。
+不过selectionMode属性的默认值是SelectionMode.SINGLE。对于默认的ListView实例，如果要启用多选，则可以使用下面的样例代码：
+listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+同时要注意MultipleSelectionModel具有selectedItems和selectedIndices属性，它们都是可观察的列表（observable list），可以被监听以检测多选情况。
+
+$Method updateItem()
+The updateItem method should not be called by developers, but it is the best method for developers to override to allow for them 
+to customise the visuals of the cell. To clarify, developers should never call this method in their code 
+(they should leave it up to the UI control, such as the javafx.scene.control.ListView control) to call this method. However, 
+the purpose of having the updateItem method is so that developers, when specifying custom cell factories (again, like the ListView 
+cell factory), the updateItem method can be overridden to allow for complete customisation of the cell.
+
+It is very important that subclasses of Cell override the updateItem method properly, as failure to do so will lead to issues such as 
+blank cells or cells with unexpected content appearing within them. Here is an example of how to properly override the updateItem method:
+
+ protected void updateItem(T item, boolean empty) {
+     super.updateItem(item, empty);
+
+     if (empty || item == null) {
+         setText(null);
+         setGraphic(null);
+     } else {
+         setText(item.toString());
+     }
+ }
+ 
+Note in this code sample two important points:
+
+We call the super.updateItem(T, boolean) method. If this is not done, the item and empty properties are not correctly set, and you are 
+likely to end up with graphical issues.We test for the empty condition, and if true, we set the text and graphic properties to null. 
+If we do not do this, it is almost guaranteed that end users will see graphical artifacts in cells unexpectedly.
+Overrides: updateItem(...) in Cell
+Parameters:
+item The new item for the cell.
+empty whether or not this cell represents data from the list. If it is empty, then it does not represent any domain data, but is a cell 
+being used to render an "empty" row.
