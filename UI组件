@@ -1,0 +1,10 @@
+DropShadow shadow = new DropShadow();
+shadow.setOffsetX(2); //设置图形边缘阴影的横向距离
+shadow.setOffsetY(2); //设置图形边缘阴影的纵向距离
+
+VBox vb = new VBox()；
+vb.setLayoutX(5); //设置VBox距离Scene左边缘的横向距离；
+
+ScrollBar sc = new ScrollBar();
+sc.setLayoutX(5); //设置scrollBar距离Scene左边缘的横向距离
+
