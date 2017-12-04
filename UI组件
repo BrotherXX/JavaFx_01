@@ -97,3 +97,11 @@ Parameters:
 item The new item for the cell.
 empty whether or not this cell represents data from the list. If it is empty, then it does not represent any domain data, but is a cell 
 being used to render an "empty" row.
+
+$TableView
+在JavaFX SDK API中有类被设计用于以表格形式展现数据的类。其中最重要的类是TableView、TableColumn和TableCell。你可以通过实现数据模型（data model）以及
+提供单元格工厂（cell factory）来来填充表格。表格相关类内置提供了对表格列数据排序、自动调整列宽功能。
+setCellValueFactory方法为每列指定了一个单元格工厂（cell factory），这些cell factory是通过PropertyValueFactory类来实现的，它将Person类中对应的属性
+映射到对应的表格列中。
+当数据模型被定义完毕，并且数据被关联到列之后，你可以通过TableView类的setItems方法来向表格中添加数据：如：table.setItems(data)。
+由于ObservableList对象具有自动追踪其包含元素的改变的功能，所以TableView的内容将会在数据改变时自动更新。
