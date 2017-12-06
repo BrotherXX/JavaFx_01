@@ -105,3 +105,43 @@ setCellValueFactory方法为每列指定了一个单元格工厂（cell factory�
 映射到对应的表格列中。
 当数据模型被定义完毕，并且数据被关联到列之后，你可以通过TableView类的setItems方法来向表格中添加数据：如：table.setItems(data)。
 由于ObservableList对象具有自动追踪其包含元素的改变的功能，所以TableView的内容将会在数据改变时自动更新。
+
+$TreeView
+树型结构可以包含带有各种不同类型数据的节点。使用带有泛型的TreeItem构造方法可以定义展现特定类型数据的树：TreeItem<T> (T value)。
+T类型的value可以指定任何对象，例如UI控件或者自定义组件等。
+
+与TreeView类不同，TreeItem类不是继承自Node类。因此，你不能对树节点增加视觉特效或者菜单。使用Cell Factory机制可以克服这个障碍，并根据你的应用程序
+所需来自定义树节点的行为。
+
+$关于setCellFactory函数的几种用法
+1）
+final TreeView tree = new TreeView(rootItem);  
+tree.setCellFactory(CheckBoxTreeCell.<String>forTreeView()); 
+2）
+treeView.setCellFactory((TreeView<String> p) -> new TextFieldTreeCellImpl());
+private final class TextFieldTreeCellImpl extends TreeCell<String> {}
+3）
+TableColumn<Person, String> emailCol = new TableColumn<>("Email");
+emailCol.setCellFactory(TextFieldTableCell.<Person>forTableColumn());       
+4）
+Callback<TableColumn<Person, String>, TableCell<Person, String>> cellFactory
+    = (TableColumn<Person, String> p) -> new EditingCell();
+TableColumn<Person, String> firstNameCol = new TableColumn<>("First Name");
+firstNameCol.setCellFactory(cellFactory);
+class EditingCell extends TableCell<Person, String> {}
+   
+5)
+Callback<TableColumn<Map, String>, TableCell<Map, String>>cellFactoryForMap 
+    = (TableColumn<Map, String> p) ->new TextFieldTableCell(new StringConverter() {   
+TableColumn<Map, String> firstDataColumn = new TableColumn<>("Class A");
+firstDataColumn.setCellFactory(cellFactoryForMap);
+
+$关于setCellValueFactory函数的几种用法
+1）
+TableColumn<Person, String> firstNameCol = new TableColumn<>("First Name");
+firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+
+2）
+public static final String Column1MapKey = "A";
+TableColumn<Map, String> firstDataColumn = new TableColumn<>("Class A");
+firstDataColumn.setCellValueFactory(new MapValueFactory(Column1MapKey));
