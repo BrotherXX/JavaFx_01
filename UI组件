@@ -136,6 +136,39 @@ Callback<TableColumn<Map, String>, TableCell<Map, String>>cellFactoryForMap
 TableColumn<Map, String> firstDataColumn = new TableColumn<>("Class A");
 firstDataColumn.setCellFactory(cellFactoryForMap);
 
+6)(此处的代码最能代表Callback函数泛型接口的用法)
+final ComboBox priorityComboBox = new ComboBox();
+riorityComboBox.setCellFactory(
+            new Callback<ListView<String>, ListCell<String>>() {
+                @Override public ListCell<String> call(ListView<String> param) {
+                    final ListCell<String> cell = new ListCell<String>() {
+                        {
+                            super.setPrefWidth(100);
+                        }    
+                        @Override public void updateItem(String item, 
+                            boolean empty) {
+                                super.updateItem(item, empty);
+                                if (item != null) {
+                                    setText(item);    
+                                    if (item.contains("High")) {
+                                        setTextFill(Color.RED);
+                                    }
+                                    else if (item.contains("Low")){
+                                        setTextFill(Color.GREEN);
+                                    }
+                                    else {
+                                        setTextFill(Color.BLACK);
+                                    }
+                                }
+                                else {
+                                    setText(null);
+                                }
+                            }
+                };
+                return cell;
+            }
+        });
+
 $关于setCellValueFactory函数的几种用法
 1）
 TableColumn<Person, String> firstNameCol = new TableColumn<>("First Name");
@@ -145,3 +178,15 @@ firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 public static final String Column1MapKey = "A";
 TableColumn<Map, String> firstDataColumn = new TableColumn<>("Class A");
 firstDataColumn.setCellValueFactory(new MapValueFactory(Column1MapKey));
+
+$separator
+在JavaFXAPI中，Separator类表示了一个横向或纵向的分隔线。它用于对应用程序用户界面元素进行分隔，但它并不会产生任何动作。
+然而你可以给它添加样式或视觉特效，甚至可以为它增加动画效果。默认情况下Separator是横向的。你可以通过setOrientation方法来改变其方向。
+Separator类是Node类的一个扩展。因此，Separator继承了Node类的所有属性。
+你也可以在程序中设置Separator的默认长度（对于横向的Separator来说是宽度，而对于纵向的Separator来说是高度），它可以在用户界面改变大小时随之动态改变。
+另外你还可以使用对Separator对象可用的CSS样式类来改变其外观。
+
+$HTML Editor
+HTMLEditor类采用HTML字符串的形式来表示编辑的内容。例如，图21-1中输入的内容是通过下面的字符串来表示的：
+“<html><head></head><body contenteditable=”true”><h1>Heading</h1><div><u>Text</u>, some text</div></body></html>”。
+由于HTMLEditor是Node类的扩展，你可以在其实例上应用视觉特效和变换。
