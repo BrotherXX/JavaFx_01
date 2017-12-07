@@ -190,3 +190,13 @@ $HTML Editor
 HTMLEditor类采用HTML字符串的形式来表示编辑的内容。例如，图21-1中输入的内容是通过下面的字符串来表示的：
 “<html><head></head><body contenteditable=”true”><h1>Heading</h1><div><u>Text</u>, some text</div></body></html>”。
 由于HTMLEditor是Node类的扩展，你可以在其实例上应用视觉特效和变换。
+
+$Tooltip
+Tooltip类表示一个常见的UI组件，它常用于为其他UI控件显示附加的信息。通过调用setTooltip方法可以将Tooltip设置给任何控件。
+因为Tooltip类是Labeled类的一个扩展，你不仅可以添加一个文本标题，还可以添加一个图标。例22-2为Password Field的Tooltip添加了一个图标。
+
+$Titles Pane & Accordion
+请不要明确地设置Titled Pane的最小、最大或者首选高度，因为这可能导致其打开或者关闭时出现异常行为。
+
+$Menu
+与其他UI控件不一样，Menu类和其他MenuItem的扩展类不是继承自Node类。他们不能直接添加到应用程序scene中，直到通过getMenus()方法添加到菜单栏中时才可见。
