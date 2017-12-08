@@ -114,6 +114,10 @@ T类型的value可以指定任何对象，例如UI控件或者自定义组件等
 所需来自定义树节点的行为。
 
 $关于setCellFactory函数的几种用法
+有四种UI控件的外观和事件行为可以通过Cell Factory机制来完全自定义。你可以对TableView、ListView、TreeView和ComboBox这四种控件应用Cell Factory。
+Cell Factory用于产生单元格（Cell）实例，它用于表示这些控件中的某一项。
+Cell类由Labeled类扩展而来，它提供了所有实现最常见的应用场景——展示并编辑文本——所需要的属性和方法。然而，当你的应用程序的任务需要在列表或表格中展示图像
+时，你可以使用graphic属性并且将任何Node放到Cell之中（参考Cell类的API规范来了解关于自定义Cell所需的更多信息）。
 1）
 final TreeView tree = new TreeView(rootItem);  
 tree.setCellFactory(CheckBoxTreeCell.<String>forTreeView()); 
@@ -200,3 +204,13 @@ $Titles Pane & Accordion
 
 $Menu
 与其他UI控件不一样，Menu类和其他MenuItem的扩展类不是继承自Node类。他们不能直接添加到应用程序scene中，直到通过getMenus()方法添加到菜单栏中时才可见。
+
+$Color Picker
+请注意ColorPicker类是ComboBoxBase类的一个扩展类并且继承了它的CSS属性。你可以定义新的combo-box-base样式来统一在ColorPickerSample应用程序中
+Combo Box和Color Picker的外观。使用例25-8中所示的样式替换ControlStyle.css文件中的样式。
+
+$Pagination Control
+无法直接向Pagination控件中添加任何内容项，因为它需要设置一个页面工厂（Page Factory）。使用Pagination类的setPageFactory方法来实现一个页面工厂，
+这样来定义页面的内容。
+setPageFactory方法用于为Pagination控件定义Page Factory。应用程序开发者需要创建一个回调方法并设置一个Page Factory来使用这个回调方法。回调方法会
+在一个页面被选中时触发。它会加载并返回被选中页面的内容。如果当前被选中的页面索引不存在，则必须返回null值。
