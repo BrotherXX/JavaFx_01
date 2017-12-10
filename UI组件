@@ -215,9 +215,47 @@ $Pagination Control
 setPageFactory方法用于为Pagination控件定义Page Factory。应用程序开发者需要创建一个回调方法并设置一个Page Factory来使用这个回调方法。回调方法会
 在一个页面被选中时触发。它会加载并返回被选中页面的内容。如果当前被选中的页面索引不存在，则必须返回null值。
 
-$Test
+$Text
 JavaFX程序中的图形内容由许多对象组成，它们都被组织到了一个名为scene graph的树形结构之中。scene graph中的每个元素被称为一个node。node可以处理不同
 类型的内容，也包括文本。node可以被变换或者被添加动画效果。你也可以为node应用各种各样的特效。使用各种node类型所共有的特性可以让你提供复杂的文本内容，
 它们可以满足现代富互联网应用（Rich Internet Application，RIA）的需要。
 JavaFX的SDK提供了javafx.scene.text.Text类，它被用来显示文本。Text类继承自Node类，因此你可以对Text应用特效、动画和变形，就像对其它各种node一样。
 由于Node类继承自Shape类，所以你可以像给其他任何shape一样为Text设置笔画或者填充模式。
+
+$使用JavaFx中的布局
+使用JavaFX内置布局面板的一个主要好处在于节点的大小和对齐方式是由布局面板来控制的。当布局面板的大小变化时，节点也会根据其预设大小的范围来调整大小。
+请注意并不是所有的节点都可以改变大小。UI控件(Control)和布局面板(Layout Pane)是可以调整大小的。但是形状(Shape)、文本(Text)以及组(Group)是不可以
+调整大小的，它们在布局中被认为是刚性对象(Rigid Objects)。
+当一个舞台(stage)被改变大小时，stage中的布局面板可能会有更多或者更少的空间来分配给其包含的控件。根据每个控件大小的最小值、预设值和最大值范围，每种
+布局面板都有自己的空间分配规则。
+一般来说，默认最大大小值为Double.MAX_VALUE的控件会扩展以填满可用空间，而指定了最大大小的控件则不会。例如，一个ListView对象有一个不受限制的最大大小。
+如果你想限制其高度为其预设大小，你可以设置其最大大小为常量Control.USE_PREF_SIZE.
+ListView<String> lvList = new ListView<>();
+ObservableList<String> items = FXCollections.observableArrayList (
+       "Hot dog", "Hamburger", "French fries",
+       "Carrot sticks", "Chicken salad");
+lvList.setItems(items);
+lvList.setMaxHeight(Control.USE_PREF_SIZE);
+默认情况下，按钮只会增长到其预设大小。但是，如果其最小宽度没有被重设，则按钮可能会收缩到标签只显示三个点(…)。为了防止按钮变得比其预设宽度更小，可以将
+它的最小宽度设置为其预设宽度。
+Button btnMoveDown = new Button("Move Down");
+btnMoveDown.setMinWidth(Control.USE_PREF_SIZE);
+控件的预设大小初始时基于计算大小值(Computed Size)。你也可以通过设置你需要的预设大小来覆盖默认预设值。下面的语句重设了ListView的预设宽度：
+lvList.setPrefWidth(150.0);
+如果你不想节点的大小发生改变，则可以将其最小、最大和预设大小设置为相同值。若是仅仅想限制高度或者宽度不变，同理将高度或者宽度的约束值设置为相同值。
+在例2-5中，创建了一个高度和宽度约束值都设置成为一致的ListView，所以当窗体的大小发生改变时ListView不会改变。其中还创建了一个所有宽度约束值被设置
+成一致的按钮。
+ListView<String> lvList = new ListView<String>();
+lvList.setMinSize(150.0, Control.USE_PREF_SIZE);
+lvList.setMaxSize(150.0, Control.USE_PREF_SIZE);
+
+Button btnDelete = new Button("Delete");
+btnDelete.setMinWidth(80.0);
+btnDelete.setPrefWidth(80.0);
+btnDelete.setMaxWidth(80.0);
+
+$$对齐内容
+每个布局面板都有一个默认的对齐方式来对齐所包含的节点。例如，在HBox和VBox布局面板中，节点是居上和居左对齐。在TilePane和FlowPane布局面板中，节点会
+居中对齐。面板自身在默认情况下则是典型的居上和居左对齐方式。
+
+
