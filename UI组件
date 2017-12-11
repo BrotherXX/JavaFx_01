@@ -258,4 +258,61 @@ $$对齐内容
 每个布局面板都有一个默认的对齐方式来对齐所包含的节点。例如，在HBox和VBox布局面板中，节点是居上和居左对齐。在TilePane和FlowPane布局面板中，节点会
 居中对齐。面板自身在默认情况下则是典型的居上和居左对齐方式。
 
+$属性与绑定
+绑定API定义了一系列的接口，可以做到当一个值发生改变或者失效时可以通知对象。Observable与ObservableValue接口触发改变通知，而InvalidationListener和
+ChangeListener接口接收通知。两者的区别是ObservableValue包装了一个值并触发此值的改变到任何已注册的ChangeListener上，而Observable(并未包装一个值)是
+触发改变到任何已注册的InvalidationListener上。
+JavaFX绑定与属性的实现都支持延迟计算(lazy evaluation)，意思是当改变发生时值并不是立即重新计算。当此值随后被请求时才进行重新计算。
+NumberBinding total =
+          Bindings.add(bill1.amountDueProperty().add(bill2.amountDueProperty()),
+              bill3.amountDueProperty());
+        total.addListener(new InvalidationListener() {
+ 
+        @Override public void invalidated(Observable o) {
+                System.out.println("The binding is now invalid.");
+            }
+        });
+        
+$JavaFx集合
+接口
+ObservableList：一种可以使用监听器(Listener)在发生改变时进行追踪的列表
+ListChangeListener：一种可以接收ObservableList的改变通知的接口
+ObservableMap：一种可以使用观察者(Observer)在发生改变时进行追踪改变的映射
+MapChangeListener：一种可以接收ObservableMap的改变通知的接口
+类
+FXCollections：一个工具类，其中包含了一些静态方法，它们与java.util.Collections中的方法一一对应
+ListChangeListener.Change：代表ObservableList中的改变
+MapChangeListener.Change：代表ObservableMap中的改变
 
+javafx.collections.ObservableList和javafx.collections.ObservableMap接口都继承了javafx.beans.Observable(也分别继承了java.util.List或
+java.util.Map)，提供了一个支持可观察性的List或Map。如果查看这些接口的具体API说明，就会发现添加或删除对应监听器的方法(ObservableList中的
+ListChangeListener, 以及 ObservableMap中的MapChangeListener)。
+public class CollectionsDemo {
+ 
+    public static void main(String[] args) {
+ 
+        // Use Java Collections to create the List.
+        List<String> list = new ArrayList<String>();
+ 
+        // Now add observability by wrapping it with ObservableList.
+    ObservableList<String> observableList = FXCollections.observableList(list);
+        observableList.addListener(new ListChangeListener() {
+ 
+            @Override
+            public void onChanged(ListChangeListener.Change change) {
+                System.out.println("Detected a change! ");
+            }
+        });
+ 
+        // Changes to the observableList WILL be reported.
+        // This line will print out "Detected a change!"
+        observableList.add("item one");
+ 
+        // Changes to the underlying list will NOT be reported
+        // Nothing will be printed as a result of the next line.
+        list.add("item two");
+ 
+        System.out.println("Size: "+observableList.size());
+ 
+    }
+}
